@@ -1,13 +1,19 @@
 package com.oxford.dictionary.ocr;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -19,6 +25,8 @@ public class Result extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+
+
         Log.d("FILETAG", "Activity progression successful");
         String term = getIntent().getStringExtra("Term");
         Log.d("FILETAG", "Got term string: "+ term);
@@ -26,8 +34,30 @@ public class Result extends AppCompatActivity {
 
         File f = createForm(term.split("\n"));
 
-        EditText editText = (EditText) findViewById(R.id.editText);
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(f));
+            String st;
+            while ((st = br.readLine()) != null)
+                str+=st+"\n";
+        } catch(IOException e){
+            Log.d("FILETAG", "Error reading file!");
+        }
+        final EditText editText = (EditText) findViewById(R.id.editText);
         editText.setText(str);
+
+
+        Button b = (Button) findViewById(R.id.button);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("label",editText.getText());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getApplicationContext(), "Copied to clipboard!", Toast.LENGTH_LONG).show();
+            }
+        });
+
         WebView webView = (WebView)findViewById(R.id.webview);
         webView.setWebChromeClient(new WebChromeClient());
         try {
@@ -72,7 +102,7 @@ public class Result extends AppCompatActivity {
 
             writer.write("<form>");
             all+="<form>";
-            str=all;
+            //str=all;
             //this is how the multiple options are created, and how the form can be any size
             while(formData.length>i)
             {

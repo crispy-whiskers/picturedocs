@@ -13,27 +13,29 @@
         android:minHeight="?android:attr/actionBarSize"
         android:title="@string/app_name"
         app:titleTextColor="@color/colorTitle" />
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mainView"
-        tools:context=".MainActivity"
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/probussnes"
         android:gravity="center_vertical|center|center_horizontal"
         android:orientation="vertical"
-        android:layout_below="@+id/toolbar">
+        tools:context=".MainActivity">
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Upload a Picture"
-            android:id="@+id/textView"
-            android:textSize="20sp" />
+            android:textSize="30sp" />
 
         <ImageView
             android:layout_width="175dp"
             android:layout_height="175dp"
-            android:src="@drawable/newproject"
-            android:contentDescription="@string/camera" />
+            android:contentDescription="@string/camera"
+            android:src="@drawable/newproject" />
     </LinearLayout>
 </RelativeLayout>
